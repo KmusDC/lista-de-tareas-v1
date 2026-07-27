@@ -22,7 +22,6 @@ const priorityConfig: Record<
 const filters = ["todas", "pendientes", "completadas"] as const;
 type Filter = (typeof filters)[number];
 
-
 const STORAGE_KEY = "kmus-tasks";
 
 const loadTasks = (): Task[] => {
@@ -44,17 +43,14 @@ export default function App() {
   const [priority, setPriority] = useState<Priority>("media");
   const [filter, setFilter] = useState<Filter>("todas");
 
-
   const [editingId, setEditingId] = useState<number | null>(null);
   const [editText, setEditText] = useState<string>("");
   const [editPriority, setEditPriority] = useState<Priority>("media");
-
 
   useEffect(() => {
     saveTasks(tasks);
   }, [tasks]);
 
- 
   const addTask = () => {
     if (input.trim() === "") return;
     setTasks((prev) => [
@@ -77,7 +73,6 @@ export default function App() {
   const clearDone = () => {
     setTasks((prev) => prev.filter((t) => !t.done));
   };
-
 
   const startEdit = (task: Task) => {
     setEditingId(task.id);
@@ -119,8 +114,6 @@ export default function App() {
     "
     >
       <div className="w-full max-w-md flex flex-col gap-6">
-
-
         <div className="relative flex flex-col gap-1">
           <h1 className="text-3xl font-bold text-white tracking-tight">
             Lista de tareas
@@ -142,19 +135,23 @@ export default function App() {
             className="absolute -bottom-6 right-0 w-24 h-20"
             style={{
               maskImage:
-                "radial-gradient(ellipse 80% 80% at center, black 40%, transparent 100%)",
+                "radial-gradient(ellipse 72% 72% at 50% 52%, black 30%, rgba(0,0,0,0.6) 55%, transparent 80%)",
               WebkitMaskImage:
-                "radial-gradient(ellipse 80% 80% at center, black 40%, transparent 100%)",
+                "radial-gradient(ellipse 72% 72% at 50% 52%, black 30% rgba(0,0,0,0.6) 55%, transparent 80%)",
+              filter: "blur(0.4px)",
             }}
           >
             <img
               src={avatar}
               alt="avatar"
-              className="w-full h-full object-contain drop-shadow-xl"
+              className="w-full h-full object-contain"
+              style={{
+                filter: "drop-shadow(0 2px 8px rgba(0,0,0,0.5))",
+                opacity: 0.92,
+              }}
             />
           </div>
         </div>
-
 
         <div
           className="
@@ -213,7 +210,6 @@ export default function App() {
           </div>
         </div>
 
-
         <div className="flex gap-1 p-1 rounded-xl bg-zinc-800/60 border border-zinc-700/60">
           {filters.map((f) => (
             <button
@@ -234,7 +230,6 @@ export default function App() {
           ))}
         </div>
 
-
         <div className="flex flex-col gap-2">
           {filtered.length === 0 && (
             <div
@@ -249,7 +244,6 @@ export default function App() {
           )}
 
           {filtered.map((task) =>
-
             editingId === task.id ? (
               <div
                 key={task.id}
@@ -324,7 +318,6 @@ export default function App() {
                 </div>
               </div>
             ) : (
-
               <div
                 key={task.id}
                 className={`
@@ -337,7 +330,6 @@ export default function App() {
                   }
                 `}
               >
-
                 <button
                   onClick={() => toggleTask(task.id)}
                   className={`
@@ -368,7 +360,6 @@ export default function App() {
                   )}
                 </button>
 
-
                 <span
                   onClick={() => !task.done && startEdit(task)}
                   className={`
@@ -382,7 +373,6 @@ export default function App() {
                 >
                   {task.text}
                 </span>
-
 
                 <span
                   className={`
@@ -426,7 +416,6 @@ export default function App() {
             ),
           )}
         </div>
-
 
         {doneCount > 0 && (
           <button
