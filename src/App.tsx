@@ -22,7 +22,7 @@ const priorityConfig: Record<
 const filters = ["todas", "pendientes", "completadas"] as const;
 type Filter = (typeof filters)[number];
 
-// ── LocalStorage helpers ──
+
 const STORAGE_KEY = "kmus-tasks";
 
 const loadTasks = (): Task[] => {
@@ -44,17 +44,17 @@ export default function App() {
   const [priority, setPriority] = useState<Priority>("media");
   const [filter, setFilter] = useState<Filter>("todas");
 
-  // ── Estado para edición ──
+
   const [editingId, setEditingId] = useState<number | null>(null);
   const [editText, setEditText] = useState<string>("");
   const [editPriority, setEditPriority] = useState<Priority>("media");
 
-  // ── Persistencia: guardar en localStorage cuando cambian las tareas ──
+
   useEffect(() => {
     saveTasks(tasks);
   }, [tasks]);
 
-  // ── CRUD ──
+ 
   const addTask = () => {
     if (input.trim() === "") return;
     setTasks((prev) => [
@@ -78,7 +78,7 @@ export default function App() {
     setTasks((prev) => prev.filter((t) => !t.done));
   };
 
-  // ── Edición ──
+
   const startEdit = (task: Task) => {
     setEditingId(task.id);
     setEditText(task.text);
@@ -101,7 +101,6 @@ export default function App() {
     setEditingId(null);
   };
 
-  // ── Filtrado ──
   const filtered = tasks.filter((t) => {
     if (filter === "pendientes") return !t.done;
     if (filter === "completadas") return t.done;
@@ -121,7 +120,7 @@ export default function App() {
     >
       <div className="w-full max-w-md flex flex-col gap-6">
 
-        {/* ── Header ── */}
+
         <div className="relative flex flex-col gap-1">
           <h1 className="text-3xl font-bold text-white tracking-tight">
             Lista de tareas
@@ -139,7 +138,6 @@ export default function App() {
             {doneCount} completada{doneCount !== 1 ? "s" : ""}
           </p>
 
-          {/* Avatar con bordes difuminados */}
           <div
             className="absolute -bottom-6 right-0 w-24 h-20"
             style={{
@@ -157,7 +155,7 @@ export default function App() {
           </div>
         </div>
 
-        {/* ── Input nueva tarea ── */}
+
         <div
           className="
           flex flex-col gap-3 p-4 rounded-2xl
@@ -215,7 +213,7 @@ export default function App() {
           </div>
         </div>
 
-        {/* ── Filtros ── */}
+
         <div className="flex gap-1 p-1 rounded-xl bg-zinc-800/60 border border-zinc-700/60">
           {filters.map((f) => (
             <button
@@ -236,7 +234,7 @@ export default function App() {
           ))}
         </div>
 
-        {/* ── Lista de tareas ── */}
+
         <div className="flex flex-col gap-2">
           {filtered.length === 0 && (
             <div
@@ -251,7 +249,7 @@ export default function App() {
           )}
 
           {filtered.map((task) =>
-            // ── Modo edición ──
+
             editingId === task.id ? (
               <div
                 key={task.id}
@@ -279,7 +277,6 @@ export default function App() {
                   "
                 />
 
-                {/* Selector de prioridad en edición */}
                 <div className="flex items-center gap-2">
                   {(["alta", "media", "baja"] as Priority[]).map((p) => (
                     <button
@@ -302,7 +299,6 @@ export default function App() {
                     </button>
                   ))}
 
-                  {/* Botones confirmar / cancelar */}
                   <div className="ml-auto flex gap-2">
                     <button
                       onClick={cancelEdit}
@@ -328,7 +324,7 @@ export default function App() {
                 </div>
               </div>
             ) : (
-              // ── Modo normal ──
+
               <div
                 key={task.id}
                 className={`
@@ -341,7 +337,7 @@ export default function App() {
                   }
                 `}
               >
-                {/* Checkbox */}
+
                 <button
                   onClick={() => toggleTask(task.id)}
                   className={`
@@ -372,7 +368,7 @@ export default function App() {
                   )}
                 </button>
 
-                {/* Texto — click para editar */}
+
                 <span
                   onClick={() => !task.done && startEdit(task)}
                   className={`
@@ -387,7 +383,7 @@ export default function App() {
                   {task.text}
                 </span>
 
-                {/* Prioridad */}
+
                 <span
                   className={`
                   shrink-0 text-xs font-medium
@@ -403,7 +399,6 @@ export default function App() {
                   {priorityConfig[task.priority].label}
                 </span>
 
-                {/* Botón editar */}
                 {!task.done && (
                   <button
                     onClick={() => startEdit(task)}
@@ -417,7 +412,6 @@ export default function App() {
                   </button>
                 )}
 
-                {/* Botón eliminar */}
                 <button
                   onClick={() => deleteTask(task.id)}
                   className="
@@ -433,7 +427,7 @@ export default function App() {
           )}
         </div>
 
-        {/* ── Limpiar completadas ── */}
+
         {doneCount > 0 && (
           <button
             onClick={clearDone}
